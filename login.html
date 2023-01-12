@@ -91,6 +91,27 @@
 
     // toast.show() 
     // tip('用户名或密码错误')//测试代码
+
+    document.querySelector('#btn-login').addEventListener('click',async function(){
+        toast.show()
+        const data = serialize(document.querySelector('form'),{hash:true})
+        if( !data.username || data.username.trim() === '') return tip('用户名不能为空')
+        if(!data.password || data.password.trim() === '') return tip('密码不能为空')
+        if(data.password.length < 6 ) return tip('密码长度不能小于6位')
+        
+
+        try{
+          const res = await axios.post('/login',data)
+          tip('登陆成功')
+          location.href='./index.html'
+        }catch(e){
+          // console.dir(e)
+          if(e.response.status === 400 ){
+            tip('用户名或密码错误')
+          }
+        }
+      tip('服务器繁忙，请稍后重试')
+      })
     </script>
   </body>
 </html>
